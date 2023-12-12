@@ -1,9 +1,0 @@
-{
-    "activity": "Create a cookbook with your favorite recipes",
-    "type": "cooking",
-    "participants": 1,
-    "price": 0,
-    "link": "",
-    "key": "1947449",
-    "accessibility": 0.05
-}
