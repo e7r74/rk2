@@ -1,83 +1,70 @@
-print("1/line 1")
-# import json
-# ide = {}
-# ide['idea'] = [
-#     {
-#     "activity": "Create a cookbook with your favorite recipes",
-#     "type": "cooking",
-#     "participants": 1,
-#     "price": 0,
-#     "link": "",
-#     "key": "1947449",
-#     "accessibility": 0.05
-# }
-# ]
-# print(ide)
+import requests
+import json
+
+class Fruit:
+    def __init__(self, name, family, order, nutrition):
+        self.name = name
+        self.family = family
+        self.order = order
+        self.nutrition = nutrition
+
+    def __str__(self):
+        return f"{self.name} - Family: {self.family}, Order: {self.order}, Nutrition: {self.nutrition}"
+
+def get_fruits_data(api_url):
+    response = requests.get(api_url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Ошибка: Невозможно получить данные. Код статуса: {response.status_code}")
+        return None
+
+def create_fruit_objects(fruits_data):
+    fruits = []
+    for fruit_data in fruits_data:
+        fruit = Fruit(
+            name=fruit_data['name'],
+            family=fruit_data['family'],
+            order=fruit_data['order'],
+            nutrition=fruit_data['nutrition']
+        )
+        fruits.append(fruit)
+    return fruits
+
+def save_fruits_to_file(fruits, filename):
+    with open(filename, 'w') as file:
+        data_to_save = []
+        for fruit in fruits:
+            fruit_data = {
+                'name': fruit.name,
+                'family': fruit.family,
+                'order': fruit.order,
+                'nutrition': fruit.nutrition
+            }
+            data_to_save.append(fruit_data)
+        json.dump(data_to_save, file, indent=4)
+
+def read_fruits_from_file(filename):
+    with open(filename, 'r') as file:
+        data = json.load(file)
+        return data
 
 
+api_url = "https://www.fruityvice.com/api/fruit/all"
+fruits_data = get_fruits_data(api_url)
 
-print("2/line19")
+if fruits_data:
+    
+    fruits = create_fruit_objects(fruits_data)
 
-# import random
+    
+    save_fruits_to_file(fruits, 'fruits_data.json')
+    print("Данные о фруктах сохранены в файл 'fruits_data.json'.")
 
-# def add_random_to_dict(data):
-  
-#     random_key = f"random_{random.randint(1, 1000)}"
-#     random_value = random.randint(1, 1000)
-#     data[random_key] = random_value
-#     return data
-
-# activity_data = {
-#     "activity": "Create a cookbook with your favorite recipes",
-#     "type": "cooking",
-#     "participants": 1,
-#     "price": 0,
-#     "link": "",
-#     "key": "1947449",
-#     "accessibility": 0.05
-# }
-
-# activity_data_with_random = add_random_to_dict(activity_data.copy())
-
-# print(f"Исходный словарь: {activity_data}")
-# print(f"Словарь с добавленным случайным значением: {activity_data_with_random}")
-
-
-
-print("3/line 47")
-
-# import random
-
-# def random_line(file_path: str) -> str:
-#     with open(file_path, 'r') as file:
-#         lines = file.readlines()
-#         return random.choice(lines)
-# random_line = random_line('text.txt')
-# print(random_line)
-
-print ("4/line 58")
-# import json
-
-# data = {
-#     "activity": "Create a cookbook with your favorite recipes",
-#     "type": "cooking",
-#     "participants": 1,
-#     "price": 0,
-#     "link": "",
-#     "key": "1947449",
-#     "accessibility": 0.05
-# }
-
-# json_string = json.dumps(data)
-# replaced_string = json_string.replace("a", "D")
-
-# data_with_replaced_A = json.loads(replaced_string)
-
-# print(data_with_replaced_A)
-print ("5/line77")
-# def line_by_line(file_path: str) -> None:
-#     with open(file_path, 'r') as file:
-#         for line in file:
-#             print(line.strip())
-            
-# line_by_line('text.txt')
+    
+    read_data = read_fruits_from_file('fruits_data.json')
+    print("\nДанные о фруктах прочитаны из файла 'fruits_data.json':")
+    for item in read_data:
+        print(item)
+else:
+    print("Невозможно продолжить без данных.")
