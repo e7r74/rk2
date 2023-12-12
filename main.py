@@ -26,7 +26,7 @@ def create_fruit_objects(fruits_data):
             name=fruit_data['name'],
             family=fruit_data['family'],
             order=fruit_data['order'],
-            nutrition=fruit_data['nutrition']
+            nutrition=fruit_data.get('nutrients', {})
         )
         fruits.append(fruit)
     return fruits
